@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment History</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    :root {
+      --mainColor: #89216b;
+      --whiteColor: #ffffff;
+      --titleColor: #555555;
+      --danger: #d9534f;
+      --success: #28a745;
+    }
+
+    body {
+      background: linear-gradient(to right, #da4453, var(--mainColor));
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--whiteColor);
+      border-radius: 1rem;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, .2);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--titleColor);
+      margin-bottom: 1.5rem;
+      font-size: 2.4rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      flex: 1;
+      text-align: center;
+      border: none;
+      border-radius: .5rem;
+      background: linear-gradient(to right, #da4453, var(--mainColor));
+      color: var(--whiteColor);
+      font-size: 1.4rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 1rem;
+      text-decoration: none;
+      display: block;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .history-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .history-card {
+      background: #f9f9f9;
+      border-radius: .8rem;
+      padding: 1.5rem;
+      border-left: 4px solid var(--mainColor);
+    }
+
+    .history-card.at-risk {
+      border-left-color: var(--danger);
+    }
+
+    .history-card.healthy {
+      border-left-color: var(--success);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .timestamp {
+      font-size: 1.2rem;
+      color: #888;
+    }
+
+    .prediction-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .prediction-badge.at-risk {
+      background: #f8d7da;
+      color: var(--danger);
+    }
+
+    .prediction-badge.healthy {
+      background: #d4edda;
+      color: var(--success);
+    }
+
+    .history-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .detail-item {
+      background: white;
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: var(--mainColor);
+    }
+
+    .no-records {
+      text-align: center;
+      padding: 3rem;
+      color: #888;
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 768px) {
+      .history-details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>📊 Assessment History</h2>
+      
+      <div class="nav-buttons">
+        <a href="{{ url_for('index') }}" class="btn">New Assessment</a>
+        <a href="{{ url_for('logout') }}" class="btn" style="background:#555;">Logout</a>
+      </div>
+
+      <div class="history-grid">
+        {% if records %}
+          {% for record in records %}
+          <div class="history-card {% if record.final_prediction == 'At Risk' %}at-risk{% else %}healthy{% endif %}">
+            <div class="history-header">
+              <div class="timestamp">{{ record.timestamp }}</div>
+              <span class="prediction-badge {% if record.final_prediction == 'At Risk' %}at-risk{% else %}healthy{% endif %}">
+                {{ record.final_prediction }}
+              </span>
+            </div>
+            
+            <div class="history-details">
+              <div class="detail-item">
+                <span class="detail-label">Age:</span> {{ record.Age }} years
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Weight:</span> {{ record.Weight }} kg
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Height:</span> {{ record.Height }} cm
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">BMI:</span> {{ record.BMI }}
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Confidence:</span> {{ record.confidence }}
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Models Used:</span> {{ record.num_models }}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-records">
+            <p>No assessment records found.</p>
+            <p>Start your first assessment using the button above.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNRD - Assessment Form</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    :root {
+      --mainColor: #89216b;
+      --whiteColor: #ffffff;
+      --titleColor: #555555;
+      --labelColor: #333333;
+    }
+
+    body {
+      background: linear-gradient(to right, #da4453, var(--mainColor));
+      min-height: 100vh;
+      display: grid;
+      place-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: var(--whiteColor);
+      border-radius: 1rem;
+      box-shadow: 0 0 2rem rgba(0, 0, 0, .3);
+      padding: 3rem;
+      width: 90%;
+      max-width: 70rem;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h2 {
+      color: var(--titleColor);
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header .welcome {
+      color: var(--mainColor);
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+
+    .form-group {
+      position: relative;
+      width: 100%;
+      margin: 2.5rem 0;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      height: 4.5rem;
+      padding: 0 1.5rem;
+      border: .15rem solid var(--labelColor);
+      border-radius: .6rem;
+      font-size: 1.6rem;
+      color: var(--labelColor);
+      background: transparent;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--mainColor);
+      box-shadow: 0 0 0 3px rgba(137, 33, 107, 0.1);
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 50%;
+      left: 1.5rem;
+      transform: translateY(-50%);
+      font-size: 1.6rem;
+      color: var(--labelColor);
+      background: var(--whiteColor);
+      padding: 0 .5rem;
+      pointer-events: none;
+      transition: 0.3s ease;
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:valid ~ label,
+    .form-group select:focus ~ label,
+    .form-group select:valid ~ label {
+      top: 0;
+      font-size: 1.3rem;
+      color: var(--mainColor);
+      font-weight: 500;
+    }
+
+    .form-group input:read-only {
+      background: #f5f5f5;
+      cursor: not-allowed;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .btn-container button,
+    .btn-container a {
+      flex: 1;
+      border: none;
+      border-radius: .6rem;
+      font-size: 1.6rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 1.3rem;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 .3rem 1.5rem rgba(0, 0, 0, .3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-container button[type="submit"] {
+      background: linear-gradient(to right, #da4453, var(--mainColor));
+      color: var(--whiteColor);
+    }
+
+    .btn-container button[type="reset"] {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-container a {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-container button:hover,
+    .btn-container a:hover { 
+      opacity: 0.85;
+      transform: translateY(-2px);
+      box-shadow: 0 .5rem 2rem rgba(0, 0, 0, .4);
+    }
+
+    .logout {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .logout a {
+      color: var(--mainColor);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .logout a:hover {
+      color: #da4453;
+    }
+
+    /* Custom scrollbar */
+    .card::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .card::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .card::-webkit-scrollbar-thumb {
+      background: var(--mainColor);
+      border-radius: 10px;
+    }
+
+    .card::-webkit-scrollbar-thumb:hover {
+      background: #da4453;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <h2>🏥 Child Nutrition Risk Assessment</h2>
+    <p class="welcome">Welcome, <strong>{{ username }}</strong>!</p>
+  </div>
+
+  <form method="POST" action="{{ url_for('predict') }}">
+
+      <div class="form-group">
+          <input type="number" name="param1" id="param1" step="0.1" min="0" max="18" required>
+          <label for="param1">Age (years)</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param2" id="param2" required>
+              <option value="" disabled selected></option>
+              <option value="0">Male</option>
+              <option value="1">Female</option>
+          </select>
+          <label for="param2">Gender</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param3" id="param3" step="0.1" min="0" required>
+          <label for="param3">Weight (kg)</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param4" id="param4" step="0.1" min="0" required>
+          <label for="param4">Height (cm)</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param5" id="param5" step="0.01" readonly required>
+          <label for="param5">BMI (Auto-calculated)</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param6" id="param6" required>
+              <option value="" disabled selected></option>
+              <option value="0">No formal education</option>
+              <option value="1">Primary</option>
+              <option value="2">Secondary</option>
+              <option value="3">Higher</option>
+          </select>
+          <label for="param6">Mother's Education</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param7" id="param7" step="100" min="0" required>
+          <label for="param7">Household Income (monthly INR)</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param8" id="param8" step="1" min="1" max="10" required>
+          <label for="param8">Meals per Day</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param9" id="param9" required>
+              <option value="" disabled selected></option>
+              <option value="0">Incomplete</option>
+              <option value="1">Complete</option>
+          </select>
+          <label for="param9">Vaccination Status</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param10" id="param10" required>
+              <option value="" disabled selected></option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+          </select>
+          <label for="param10">Access to Clean Water</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param11" id="param11" required>
+              <option value="" disabled selected></option>
+              <option value="0">Urban</option>
+              <option value="1">Rural</option>
+              <option value="2">Suburban</option>
+          </select>
+          <label for="param11">Region / Area</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param12" id="param12" step="0.1" min="0" max="6" required>
+          <label for="param12">Birth Weight (kg)</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param13" id="param13" step="1" min="1" max="20" required>
+          <label for="param13">Family Size</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param14" id="param14" required>
+              <option value="" disabled selected></option>
+              <option value="0">No formal education</option>
+              <option value="1">Primary</option>
+              <option value="2">Secondary</option>
+              <option value="3">Higher</option>
+          </select>
+          <label for="param14">Father's Education</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param15" id="param15" required>
+              <option value="" disabled selected></option>
+              <option value="0">Vegetarian</option>
+              <option value="1">Non-Vegetarian</option>
+              <option value="2">Mixed</option>
+          </select>
+          <label for="param15">Food Habits</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param16" id="param16" required>
+             <option value="" disabled selected></option>
+             <option value="0">None</option> 
+             <option value="1">Asthma</option>
+             <option value="2">Diabetes</option>
+             <option value="3">Heart Disease</option>
+          </select>
+          <label for="param16">Inherited Diseases</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param17" id="param17" min="1" max="5" required>
+          <label for="param17">Appetite Level (1-5)</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param18" id="param18" required>
+              <option value="" disabled selected></option>
+              <option value="0">Home</option>
+              <option value="1">Hospital</option>
+              <option value="2">Clinic</option>
+              <option value="3">Other</option>
+          </select>
+          <label for="param18">Place of Birth</label>
+      </div>
+
+      <div class="form-group">
+          <select name="param19" id="param19" required>
+              <option value="" disabled selected></option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+          </select>
+          <label for="param19">Sanitation Access</label>
+      </div>
+
+      <div class="form-group">
+          <input type="number" name="param20" id="param20" step="0.1" min="0" max="36" required>
+          <label for="param20">Breastfeeding Duration (months)</label>
+      </div>
+
+      <div class="btn-container">
+          <button type="submit">🔍 Predict Risk</button>
+          <button type="reset">🔄 Reset Form</button>
+          <a href="{{ url_for('history') }}">📊 View History</a>
+      </div>
+  </form>
+
+  <div class="logout">
+      <a href="{{ url_for('logout') }}">🚪 Logout</a>
+  </div>
+</div>
+
+<script>
+const weightInput = document.getElementById('param3');
+const heightInput = document.getElementById('param4');
+const bmiInput = document.getElementById('param5');
+
+function calculateBMI() {
+    const weight = parseFloat(weightInput.value);
+    const heightCm = parseFloat(heightInput.value);
+    if (weight > 0 && heightCm > 0) {
+        const heightM = heightCm / 100;
+        const bmi = weight / (heightM * heightM);
+        bmiInput.value = bmi.toFixed(2);
+    } else {
+        bmiInput.value = '';
+    }
+}
+
+weightInput.addEventListener('input', calculateBMI);
+heightInput.addEventListener('input', calculateBMI);
+
+// Add visual feedback on form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '⏳ Analyzing...';
+    submitBtn.disabled = true;
+});
+</script>
+
+</body>
+</html>
